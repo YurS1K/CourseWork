@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
-def parse_ria_tags(article_url, headers):
+def parse_ria_sport_tags(article_url, headers):
     try:
         response = requests.get(article_url, headers=headers)
         response.raise_for_status()
@@ -42,6 +42,7 @@ def parse_ria_sport(url):
             return []
 
         news_items = news_container.find_all('div', class_='list-item')
+
         parsed_data = []
 
         for item in news_items:
@@ -50,7 +51,8 @@ def parse_ria_sport(url):
 
             link = urljoin(url, title_tag['href']) if title_tag else ''
 
-            tags, date, author = parse_ria_tags(link, headers) if link else []
+            tags, date, author = parse_ria_sport_tags(link, headers) if link else []
+
             tags = list(set(filter(None, tags)))
 
             date = date[0:16]
@@ -64,7 +66,7 @@ def parse_ria_sport(url):
             })
 
         return parsed_data
-
     except Exception as e:
         print(f"Ошибка: {str(e)}")
         return []
+

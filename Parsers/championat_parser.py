@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
-def parse_champion_tags(article_url, headers):
+def parse_championat_tags(article_url, headers):
     try:
         response = requests.get(article_url, headers=headers)
         response.raise_for_status()
@@ -23,7 +23,7 @@ def parse_champion_tags(article_url, headers):
         return []
 
 
-def parse_champion(url):
+def parse_championat(url):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/91.0.4472.124 Safari/537.36',
@@ -39,17 +39,17 @@ def parse_champion(url):
         if not news_container:
             return []
 
-        news_items = news_container.find_all('div', class_='news-item', limit=25)
+        news_items = news_container.find_all('div', class_='news-item', limit=100)
         parsed_data = []
 
         for item in news_items:
             title_tag = item.find('a', class_='news-item__title')
             title = title_tag.get_text(strip=True) if title_tag else 'Без заголовка'
             link = urljoin(url, title_tag['href']) if title_tag else ''
-            tags, date, author = parse_champion_tags(link, headers) if link else []
+            tags, date, author = parse_championat_tags(link, headers) if link else []
             tags = list(set(filter(None, tags)))
 
-            date = date[0:18]
+            date = date[0:19]
 
             parsed_data.append({
                 'title': title,

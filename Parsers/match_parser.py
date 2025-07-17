@@ -34,7 +34,7 @@ def parse_match(url):
         if not news_container:
             return []
 
-        news_items = news_container.find_all('a', class_='node-news-list__item', limit=25)
+        news_items = news_container.find_all('a', class_='node-news-list__item', limit=100)
 
         parsed_data = []
         for item in news_items:
@@ -64,3 +64,4 @@ def parse_match(url):
     except Exception as e:
         print(f"Ошибка: {str(e)}")
         return []
+
